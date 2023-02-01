@@ -124,11 +124,11 @@ def parse_markdown_to_html(file_name: str) -> str:
                 case (key, val): # the default case
                     content += f"\n<meta name='{key}' content='{val}'>"
 
-    content += "\n<link rel='stylesheet' href='code_css/styles/default.min.css'>"
-    content += "\n<script src='css_code/highlight.min.js'></script>"
+    content += "\n<link rel='stylesheet' href='{BASE_URL}css_code/styles/default.min.css'>"
+    content += "\n<script src='{BASE_URL}css_code/highlight.min.js'></script>"
     content += "\n<script>hljs.highlightAll();</script>"
 
-    content += "\n<link rel='stylesheet' href='index.css'>"
+    content += "\n<link rel='stylesheet' href='{BASE_URL}default.css'>"
 
     content += "\n</head>\n<body>"
 
