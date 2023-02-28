@@ -1,8 +1,9 @@
 ---
-title: Bin Packing Problem
+title: "Bin Packing Problem"
 date: 2023-02-01
+timeline: 2020-05-31
 category: work
-tags: ROS C++ OpenCV Epilog
+tags: Java Maven
 ---
 
-# Bin packing problem
+# Bin Packing Problem

@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+
+  <title>Writing to the page</title>
+
+  <link rel="stylesheet" href="https://pyscript.net/latest/pyscript.css" />
+  <script defer src="https://pyscript.net/latest/pyscript.js"></script>
+  <!-- dokumentacija je na https://pyscript.net/ -->
+  </head>
+
+  <body>
+    <div>
+      <button py-click="write_to_page()" id="manual">Say Hello</button>
+      <input id="target" value="Hello World">
+    </div>
+    <div id="manual-write"></div>
+    <p id="manual-write2"></p>
+
+    <py-script>
+    def write_to_page():
+        manual_div = Element("manual-write")
+        manual_p = Element("manual-write2")
+        input_div = Element("target")
+        manual_div.element.innerText = input_div.value
+        manual_p.element.innerText = input_div.value
+    </py-script>
+  </body>
+</html>
