@@ -1,10 +1,6 @@
+import json
 import os
 import re
-
-CONST = {
-    #"BASE_URL": "file:///C:/Users/dmoho/Documents/Projects/dmohorcic.github.io/",
-    "BASE_URL": "https://dmohorcic.github.io/",
-}
 
 
 def _find_all_code_envs(content: str) -> list:
@@ -113,9 +109,10 @@ def parse_markdown_to_html(file_name: str) -> str:
                 break
         elif header:
             # get header parameter
-            args = line.strip().split(": ")
+            args = line.strip().split(": ", maxsplit=1)
             match args:
                 case ("title", title):
+                    title = title.replace("\"", "")
                     content += f"\n<title>{title}</title>"
                 case ("tags", tags):
                     tags = tags.split(" ")
@@ -244,7 +241,7 @@ def builds_in_html(content: str) -> str:
                     c = 0
                     for line in f:
                         if line.startswith("title"):
-                            file_title = line[7:].strip()
+                            file_title = line[7:].strip().replace("\"", "")
                             c += 1
                         elif line.startswith("category"):
                             file_category = line[10:].strip()
@@ -261,6 +258,13 @@ def builds_in_html(content: str) -> str:
     return "\n".join(content_lines)
 
 
+CONST: dict = None
+def _parse_const(env: str = "prod") -> dict:
+    with open("constants.json", "r") as f:
+        data = json.load(f)
+    return data[env]
+
+
 def replaces_in_html(content: str) -> str:
     keys = CONST.keys()
     for key in keys:
@@ -269,6 +273,15 @@ def replaces_in_html(content: str) -> str:
 
 
 def main():
+    # Build all blogs and projects
+    for folder in ["blog", "project"]:
+        for file_name in os.listdir(f"_{folder}"):
+            file_name = file_name.split(".")[0]
+            content = parse_markdown_to_html(f"_{folder}/{file_name}.md")
+            content = replaces_in_html(content)
+            with open(f"{folder}/{file_name}.html", "w", encoding="UTF-8") as f:
+                f.write(content)
+
     # Build 4 base files
     for base_file in ["about", "blog", "index", "project"]:
         with open(f"_{base_file}.html", "r", encoding="UTF-8") as f:
@@ -279,15 +292,13 @@ def main():
         with open(f"{base_file}.html", "w", encoding="UTF-8") as f:
             f.write(content)
 
-    # Build all blogs and projects
-    for folder in ["blog", "project"]:
-        for file_name in os.listdir(f"_{folder}"):
-            file_name = file_name.split(".")[0]
-            content = parse_markdown_to_html(f"_{folder}/{file_name}.md")
-            content = replaces_in_html(content)
-            with open(f"{folder}/{file_name}.html", "w", encoding="UTF-8") as f:
-                f.write(content)
-
 
 if __name__ == "__main__":
+    prod = input("Build for production ([y]/n)? ")
+    if prod == "n":
+        print("Building for development")
+        CONST = _parse_const("dev")
+    else:
+        print("Building for production")
+        CONST = _parse_const("prod")
     main()

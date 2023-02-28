@@ -5,6 +5,7 @@
 <meta name='viewport' content='width=device-width, initial-scale=1.0'>
 <title>Kidnapped Robot Problem</title>
 <meta name='date' content='2022-09-10'>
+<meta name='timeline' content='2019-09-31'>
 <meta name='category' content='work'>
 <meta name='tag' content='ROS'>
 <meta name='tag' content='C++'>
@@ -23,7 +24,7 @@
   <a href='https://dmohorcic.github.io/about.html'>About</a>
 </div>
 <h1>Kidnapped Robot Problem</h1>
-<p>During school break in 2019, I had a summer job at <a href='www.epilog.net' target='_blank'>Epilog d.o.o.</a>, a company that develops autonomous warehouse solutions. The IT team I joined was building a robot as well as developing software for its systems. Since I was a student with little experience, I was assigned a side project: Kidnapped Robot Problem.</p>
+<p>During school break in 2019, I had a summer job at <a href='https://www.epilog.net/en' target='_blank'>Epilog d.o.o.</a>, a company that develops autonomous warehouse solutions. The IT team I joined was building a robot as well as developing software for its systems. Since I was a student with little experience, I was assigned a side project: Kidnapped Robot Problem.</p>
 <h2>Problem</h2>
 <p>The Kidnapped Robot Problem is a problem of an autonomous robot, where said robot gets 'kidnapped', or lost, which means that the robot is moved by an external force, e.g. someone picks it up and takes it to another spot. The original problem is that the robot suddenly finds itself in an unknown environment, and needs to find its location in it. In my case, I focused only on the problem where the environment is known, but the location of the robot is not.</p>
 <h2>Alternative solutions</h2>
@@ -32,18 +33,18 @@
 <h2>Solution</h2>
 <p>I approached the problem from an exploration perspective. If a robot suddenly doesn't know where on the map it is, it can be treated the same as if it finds itself in an unknown environment. That way we can treat the environment as if we have never seen it before, and start to map it from scratch. The core idea is to then compare our newly created map of the environment to the already known map, and try to figure out where the robot is.</p>
 <p>Our robot was fitted with a <a href='https://en.wikipedia.org/wiki/Lidar' target='_blank'>lidar</a>, which uses a laser to measure distances with a few millimeter-tolerance. It was used for new map generation. The robot ran on Robot Operating System, <a href='https://www.ros.org/' target='_blank'>ROS</a>, and the algorithm was written in C++ with <a href='https://opencv.org/' target='_blank'>OpenCV</a>. Our robot was also confined to an indoor and closed space, which had QR codes at various locations to help the robot orient itself in it. If such a QR code was seen, the robot immediately knew its precise position in the environment.</p>
-<p>I used two services, already written for ROS. The first one is <a href='https://wiki.ros.org/gmapping' target='_blank'>gmapping</a>, which maps the environment and localizes the robot within it. The second one is <a href='' target='_blank'>TODO</a>, which extracts the edges and unexplored sections of a map. The service I wrote combined both information, and used information about known QR codes in the environment. The algorithm works as follows:</p>
+<p>I used two services, already written for ROS. The first one is <a href='https://wiki.ros.org/gmapping' target='_blank'>gmapping</a>, which maps the environment and localizes the robot within it. The second one is <a href='http://wiki.ros.org/frontier_exploration' target='_blank'>frontier exploration</a>, which extracts the edges and unexplored sections of a map. The service I wrote combined both information, and used information about known QR codes in the environment. The algorithm works as follows:</p>
 <ul>
 <li>wait for gmapping to map a new portion of the map,</li>
 <li>use OpenCV's template matching to overlay the newly generated map with a known map,</li>
 <li>from best matches determine where QR codes should be on the newly generated map,</li>
-<li>use TODO's extracted edges and score them according to distance from the robot and to the nearest expected QR code,</li>
+<li>use frontier exploration's extracted edges and score them according to distance from the robot and to the nearest expected QR code,</li>
 <li>send the coordinates with the highest score to the global planner,</li>
 <li>repeat until the QR code is found.</li>
 </ul>
 <h2>Conclusions</h2>
 <p>The algorithm was tested briefly, as it was a low-priority project, but showed promising results -  the proposed coordinates always pointed in the direction of a QR code. Coordinate sending was also not used, as it would require the modification of the global planner, but the robot was moved manually toward the best coordinates.</p>
 <p><!--A few modifications to the algorithm were required. I was not an experienced programmer back then, and some refactoring would be needed to make my code more efficient.--></p>
-<h2>Today</h2>
+<p><!--## Today--></p>
 </body>
 </html>
