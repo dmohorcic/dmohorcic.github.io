@@ -7,8 +7,6 @@ tags: ROS C++ OpenCV
 organisation: "Epilog d.o.o"
 ---
 
-# Kidnapped Robot Problem
-
 During school break in 2019, I had a summer job at [Epilog d.o.o.](https://www.epilog.net/en), a company that develops autonomous warehouse solutions. The IT team I joined was building a robot as well as developing software for its systems. Since I was a student with little experience, I was assigned a side project: Kidnapped Robot Problem.
 
 ## Problem
